@@ -1,7 +1,10 @@
-DropDB () {
+#!/bin/bash
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DBDIR="$DIR/../databases"
+
 echo "please Enter the Name of the DB to delete:"
 read dbname
-if [ -d "databases/$dbname" ]
+if [ -d "$DBDIR/$dbname" ]
 then
     echo "Are you sure you want to delete the database '$dbname'? (y/n)"
     read confirmation
@@ -10,9 +13,8 @@ then
         exit 0
     fi
     echo "Deleting database..."
-    rm -r "databases/$dbname"
+    rm -r "$DBDIR/$dbname"
     echo "Database deleted successfully"
 else
     echo "Database not found"
 fi
-}

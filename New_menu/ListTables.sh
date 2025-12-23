@@ -10,7 +10,7 @@
     else 
         echo -e "\nYour tables are:\n"
         for table in $tables; do
-            echo "$table"
+            echo "$(basename "$table" .data)"
         done
     fi
     

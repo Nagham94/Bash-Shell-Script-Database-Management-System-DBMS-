@@ -1,4 +1,4 @@
-ConnectToDB (){   
+#!/bin/bash  
 echo "please enter the name of the Database you want to be connected to : "
 read DB_name
 
@@ -20,7 +20,7 @@ then
                                      1) echo "Create Table selected"
 					                         ./CreateTable.sh "$DB_name" ;;
                                      2) echo "List Tables selected"
-					                         ./ListTables.sh "$DB_name" ;;
+					                         ./New_menu/ListTables.sh "$DB_name" ;;
                                      3) echo "Drop Table selected"
 					                         ./DropTable.sh "$DB_name" ;;
                                      4) echo "Insert Into Table selected"
@@ -40,4 +40,4 @@ then
 else
 	echo "$DB_name Database doesn't exist! try again :)"
 fi
-}
+
