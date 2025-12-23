@@ -1,3 +1,4 @@
+DropDB () {
 echo "please Enter the Name of the DB to delete:"
 read dbname
 if [ -d "databases/$dbname" ]
@@ -14,3 +15,4 @@ then
 else
     echo "Database not found"
 fi
+}
