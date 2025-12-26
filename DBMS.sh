@@ -24,13 +24,13 @@ do
 
 	case $choice in
 		1) createDatabase
-			;;
+			createDatabase ;;
 		2) listDatabases
-			;;
+			listDatabases ;;
 		3) connectDatabase
-			;;
+			connectDatabase ;;
 		4) dropDatabase
-			;;
+			dropDatabase ;;
 		5) exit 0
 			;;
 	esac
