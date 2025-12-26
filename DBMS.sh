@@ -17,7 +17,7 @@ case $choice in
 	1) create_database
 		createDatabase ;;
 	2) list_database
-		listDatabase ;;
+		listDatabases ;;
 	3) connect_database
 		connectDatabase ;;
 	4) drop_database
