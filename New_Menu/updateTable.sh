@@ -22,6 +22,12 @@ updateTable() {
             fi
 
             echo "Current record:"
+            echo "${columns[*]}" | sed 's/ /:/g'
+            sep_line=""
+            for ((j=0; j<columns_num; j++)); do
+                sep_line+="---"
+            done
+            echo "$sep_line"
             awk -F: -v pk="$search_pk" '$1==pk' "$DATA_FILE"
             echo ""
 
