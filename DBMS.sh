@@ -1,25 +1,37 @@
 #!/bin/bash
 
-echo "Main Menu:"
-echo "1) Create Database"
-echo "2) List Database"
-echo "3) Connect To Databases"
-echo "4) Drop Database"
+#source createDatabase.sh
+#source dropDatabase.sh
+DBDIR="Databases" 
+NEWMENU_DIR="New_Menu"
+MAINMENU_DIR="Main_Menu"
 
-read -p "Choose an option: " choice
+source "$MAINMENU_DIR/createDatabase.sh"
+source "$MAINMENU_DIR/listDatabases.sh"
+source "$MAINMENU_DIR/connectDatabase.sh"
+source "$MAINMENU_DIR/dropDatabase.sh"
 
-source "./Main_Menu/connectDatabase.sh"
-source "./Main_Menu/dropDatabase.sh"
-source "./Main_Menu/createDatabase.sh"
-source "./Main_Menu/listDatabase.sh" 
+while true; 
+do
+	echo "Main Menu:"
+	echo "1) Create Database"
+	echo "2) List Database"
+	echo "3) Connect To Databases"
+	echo "4) Drop Database"
+	echo "5) Exit"
 
-case $choice in
-	1) create_database
-		createDatabase ;;
-	2) list_database
-		listDatabases ;;
-	3) connect_database
-		connectDatabase ;;
-	4) drop_database
-		dropDatabase ;;
-esac
+	read -p "Choose an option: " choice
+
+	case $choice in
+		1) createDatabase
+			;;
+		2) listDatabases
+			;;
+		3) connectDatabase
+			;;
+		4) dropDatabase
+			;;
+		5) exit 0
+			;;
+	esac
+done
