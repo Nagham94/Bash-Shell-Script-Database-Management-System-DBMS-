@@ -1,6 +1,5 @@
 #!/bin/bash
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DBDIR="$DIR/../databases"
+DBDIR="../databases"
 
 echo "please Enter the Name of the DB to delete:"
 read dbname
