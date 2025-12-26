@@ -1,9 +1,11 @@
 #!/bin/bash
-    DB_NAME=$1
+DBDIR="../Databases"
+
+listTables() {
 
     echo "listing all tables in the current database..."
 
-    tables=$(ls databases/$DB_NAME/*.data 2> /dev/null)
+    tables=$(ls $DBDIR/$DB_NAME/*.data 2> /dev/null)
     
     if [ -z "$tables" ]; then
         echo -e "\nYou don't have any tables yet\n"
@@ -13,4 +15,4 @@
             echo "$(basename "$table" .data)"
         done
     fi
-    
+}   
