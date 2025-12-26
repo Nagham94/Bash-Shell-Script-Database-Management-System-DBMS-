@@ -1,5 +1,5 @@
 #!/bin/bash
-DBDIR="../Databases"
+DBDIR="Databases"
 
 listTables() {
 

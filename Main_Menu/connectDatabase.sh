@@ -1,5 +1,5 @@
 #!/bin/bash 
-DBDIR="../Databases"
+DBDIR="Databases"
 NEWMENU_DIR="New_Menu"
 MAINMENU_DIR="Main_Menu"
 

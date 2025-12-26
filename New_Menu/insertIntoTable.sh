@@ -2,8 +2,7 @@
 insertIntoTable() {
 echo "enter the name of the table to insert data into:"
 read table_name
-DBDIR="../databases"
-DB_NAME=$1
+DBDIR="Databases"
 if [ -f "$DBDIR/$DB_NAME/$table_name.data" ]; then
     columns=($(awk -F: '{print $1}' "$DBDIR/$DB_NAME/$table_name.meta"))
     types=($(awk -F: '{print $2}' "$DBDIR/$DB_NAME/$table_name.meta"))

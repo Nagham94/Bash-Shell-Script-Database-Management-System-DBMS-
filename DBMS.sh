@@ -8,13 +8,16 @@ echo "4) Drop Database"
 
 read -p "Choose an option: " choice
 
-#case $choice in
-#	1) create_database
-#		;;
-#	2) list_database
-#		;;
-#	3) connect database
-#		;;
-#	4) drop database
-#		;;
-#esac
+source "./Main_Menu/connectDatabase.sh"
+source "./Main_Menu/dropDatabase.sh"
+
+case $choice in
+	1) create_database
+		;;
+	2) list_database
+		;;
+	3) connect_database
+		connectDatabase ;;
+	4) drop_database
+		dropDatabase ;;
+esac

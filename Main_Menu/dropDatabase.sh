@@ -1,5 +1,5 @@
 #!/bin/bash
-DBDIR="../Databases"
+DBDIR="Databases"
 
 dropDatabase() {
 echo "please Enter the Name of the DB to delete:"
