@@ -10,7 +10,7 @@ source "$NEWMENU_DIR/listTables.sh"
 source "$NEWMENU_DIR/insertIntoTable.sh"
 #source "$NEWMENU_DIR/selectFromTable.sh"
 #source "$NEWMENU_DIR/deleteFromTable.sh"
-#source "$NEWMENU_DIR/updateTable.sh"
+source "$NEWMENU_DIR/updateTable.sh"
 
 connectDatabase() {
     echo "please enter the name of the Database you want to be connected to : "
@@ -44,8 +44,8 @@ connectDatabase() {
                 #   selectFromTable ;;
                 #6) echo "Delete From Table selected"
                 #   deleteFromTable ;;
-                #7) echo "Update Table selected"
-                #   updateTable ;;
+                7) echo "Update Table selected"
+                   updateTable ;;
                 8) echo "Returning to Main Menu..."
                         return ;;
                 *) echo "Invalid choice, try again" ;;
