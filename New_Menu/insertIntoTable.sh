@@ -12,15 +12,24 @@ if [ -f "$DATA_FILE" ]; then
     columns_num=${#columns[@]}
 
     if [ ! -s "$DATA_FILE" ]; then
+        echo "${columns[*]}" | sed 's/ /:/g' >> "$DATA_FILE"
+
+        sep_line=""
+        for ((j=0; j<columns_num; j++)); do
+            sep_line+="---"
+        done
+        echo "$sep_line" >> "$DATA_FILE"
+ 
         new_pk=1
     else
         last_pk=$(awk -F: 'END {print $1}' "$DATA_FILE")
         new_pk=$((last_pk + 1))
     fi
 
-    record="$new_pk"
-    
-    for ((i=1; i<columns_num; i++)); do
+    while true; do
+        record="$new_pk"
+        
+        for ((i=1; i<columns_num; i++)); do
         while true; do
             read -p "Enter value for ${columns[i]} (${types[i]}): " value
 
@@ -52,11 +61,18 @@ if [ -f "$DATA_FILE" ]; then
             record+=":$value"
             break
         done
-    done
+        done
 
     echo "$record" >> "$DATA_FILE"
 
     echo "Data inserted successfully into $table_name."
+        
+        read -p "Do you want to insert another row? (yes/no): " another
+        if [[ "$another" != "yes" && "$another" != "y" ]]; then
+            break
+        fi
+        new_pk=$((new_pk + 1))
+    done
 else
     echo "Table $table_name does not exist in database $DB_NAME."
 fi
