@@ -1,17 +1,21 @@
-createDatabase() {
-        read -p "Enter Database Name: " db_name
+#!/bin/bash 
 
-        if [[ ! "$db_name" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+DBDIR="Databases" 
+
+createDatabase() {
+        read -p "Enter Database Name: " DB_NAME
+
+        if [[ ! "$DB_NAME" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
                 echo "Invalid database name!"
                 return
         fi
-
+        
         # Check if database already exists
-        if [[ -d "$db_name" ]]; then
-                echo "Database '$db_name' already exists!"
+        if [[ -d "$DBDIR/$DB_NAME" ]]; then
+                echo "Database '$DB_NAME' already exists!"
         else
-                mkdir "$db_name"
-                echo "Database '$db_name' created successfully"
+                mkdir "$DBDIR/$DB_NAME"
+                echo "Database '$DB_NAME' created successfully"
         fi
 }
 
