@@ -1,9 +1,13 @@
-#!/bin/bash 
+#!/bin/bash
+
+# base directory for databases
 DBDIR="Databases"
+# directory containing table operation scripts
 NEWMENU_DIR="New_Menu"
+# directory containing main menu scripts
 MAINMENU_DIR="Main_Menu"
 
-# Load table functions
+# load all table-related functions from their respective script files
 source "$NEWMENU_DIR/createTable.sh"
 source "$NEWMENU_DIR/listTables.sh"
 source "$NEWMENU_DIR/dropTable.sh"
@@ -13,15 +17,21 @@ source "$NEWMENU_DIR/deleteFromTable.sh"
 source "$NEWMENU_DIR/updateTable.sh"
 
 connectDatabase() {
+    # ask user for the database name to connect to
     echo "please enter the name of the Database you want to be connected to : "
     read DB_NAME
 
+    # check if the database directory exists
     if [[ -d "$DBDIR/$DB_NAME" ]]; then
 
+        # confirm successful connection
         echo "connected to $DB_NAME Database successfully!"
+        # set environment variable for the current database (used by table functions)
         export CURRENT_DB="$DBDIR/$DB_NAME"
 
+        # display menu of table operations
         echo "choose an option : "
+        # use select to create a numbered menu for user selection
         select choice in "Create Table" \
                          "List Tables" \
                          "Drop Table" \
@@ -31,6 +41,7 @@ connectDatabase() {
                          "Update Table" \
                          "Back to Main Menu"
         do
+            # execute the selected operation based on user choice
             case $REPLY in
                 1) echo "Create Table selected"
                    createTable ;;
@@ -53,6 +64,7 @@ connectDatabase() {
         done
 
     else
+        # database does not exist
         echo "$DB_NAME Database doesn't exist! try again :)"
     fi
 }
