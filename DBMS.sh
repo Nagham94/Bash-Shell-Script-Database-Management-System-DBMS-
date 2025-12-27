@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#source createDatabase.sh
-#source dropDatabase.sh
 DBDIR="Databases" 
 NEWMENU_DIR="New_Menu"
 MAINMENU_DIR="Main_Menu"
@@ -24,13 +22,13 @@ do
 
 	case $choice in
 		1) createDatabase
-			createDatabase ;;
+			;;
 		2) listDatabases
-			listDatabases ;;
+			;;
 		3) connectDatabase
-			connectDatabase ;;
+			;;
 		4) dropDatabase
-			dropDatabase ;;
+			;;
 		5) exit 0
 			;;
 	esac
