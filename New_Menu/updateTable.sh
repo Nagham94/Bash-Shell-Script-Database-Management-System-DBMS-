@@ -7,6 +7,11 @@ updateTable() {
     DATA_FILE="$DBDIR/$DB_NAME/$table_name.data"
     
     if [ -f "$DATA_FILE" ]; then
+        if [ ! -s "$DATA_FILE" ] || [ -z "$(grep -v '^[[:space:]]*$' "$DATA_FILE")" ]; then
+            echo "Table $table_name is empty. There is no data to update."
+            return
+        fi
+
         columns=($(awk -F: '{print $1}' "$META_FILE"))
         types=($(awk -F: '{print $2}' "$META_FILE"))
         PK_index=$(awk -F: '{if($3=="PK") print NR-1}' "$META_FILE")
