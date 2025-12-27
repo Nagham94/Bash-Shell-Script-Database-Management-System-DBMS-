@@ -6,10 +6,10 @@ MAINMENU_DIR="Main_Menu"
 # Load table functions
 source "$NEWMENU_DIR/createTable.sh"
 source "$NEWMENU_DIR/listTables.sh"
-#source "$NEWMENU_DIR/dropTable.sh"
+source "$NEWMENU_DIR/dropTable.sh"
 source "$NEWMENU_DIR/insertIntoTable.sh"
-#source "$NEWMENU_DIR/selectFromTable.sh"
-#source "$NEWMENU_DIR/deleteFromTable.sh"
+source "$NEWMENU_DIR/selectFromTable.sh"
+source "$NEWMENU_DIR/deleteFromTable.sh"
 source "$NEWMENU_DIR/updateTable.sh"
 
 connectDatabase() {
@@ -36,14 +36,14 @@ connectDatabase() {
                    createTable ;;
                 2) echo "List Tables selected"
                    listTables ;;
-                #3) echo "Drop Table selected"
-                #   dropTable ;;
+                3) echo "Drop Table selected"
+                   dropTable ;;
                 4) echo "Insert Into Table selected"
                    insertIntoTable ;;
-                #5) echo "Select From Table selected"
-                #   selectFromTable ;;
-                #6) echo "Delete From Table selected"
-                #   deleteFromTable ;;
+                5) echo "Select From Table selected"
+                   selectFromTable ;;
+                6) echo "Delete From Table selected"
+                   deleteFromTable ;;
                 7) echo "Update Table selected"
                    updateTable ;;
                 8) echo "Returning to Main Menu..."
