@@ -11,7 +11,8 @@ if [ -f "$DATA_FILE" ]; then
     PK_index=$(awk -F: '{if($3=="PK") print NR-1}' "$META_FILE")
     columns_num=${#columns[@]}
 
-    if [ ! -s "$DATA_FILE" ]; then
+    if [ ! -s "$DATA_FILE" ] || [ -z "$(grep -v '^[[:space:]]*$' "$DATA_FILE")" ]; then
+        > "$DATA_FILE"
         echo "${columns[*]}" | sed 's/ /:/g' >> "$DATA_FILE"
 
         sep_line=""
