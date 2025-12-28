@@ -33,87 +33,92 @@ insertIntoTable() {
             done
             echo "$sep_line" >> "$DATA_FILE"
 
-            # start primary key counter at 1
-            new_pk=1
-        else
-            # read last primary key from the last data row
-            last_pk=$(awk -F: 'END {print $1}' "$DATA_FILE")
-            new_pk=$((last_pk + 1))
-        fi
-
-        # main insert loop: allow multiple inserts
-        while true; do
-            record="$new_pk"
-
-            # prompt for each non-PK column value and validate by type
-            for ((i=1; i<columns_num; i++)); do
-                while true; do
-                    echo "Enter value for ${columns[i]} (${types[i]}): "
-                    read value
-
-                    case "${types[i]}" in
-                        int)
-                            # reject empty values
-                            if [[ -z "$value" ]]; then
-                                echo "Integer value cannot be empty."
-                                continue
-                            fi
-                            # accept only integer values
-                            if ! [[ "$value" =~ ^-?[0-9]+$ ]]; then
-                                echo "Invalid input. Please enter an integer."
-                                continue
-                            fi
-                            ;;
-                        string)
-                            # reject empty values
-                            if [[ -z "$value" ]]; then
-                                echo "Invalid input. Please enter a non-empty string."
-                                continue
-                            fi
-                            # Separator check
-                            if [[ "$value" == *:* ]]; then
-                                echo "Invalid input. ':' is not allowed in string values."
-                                continue
-                            fi
-
-                            ;;
-                        bool)
-                            # reject empty values
-                            if [[ -z "$value" ]]; then
-                                echo "Boolean value cannot be empty."
-                                continue
-                            fi
-                            # accept only 'true' or 'false'
-                            if ! [[ "$value" =~ ^(true|false)$ ]]; then
-                                echo "Invalid input. Please enter 'true' or 'false'."
-                                continue
-                            fi
-                            ;;
-                        *)
-                            # unknown type in metadata
-                            echo "Unknown data type for column ${columns[i]}."
-                            continue 2
-                            ;;
-                    esac
-
-                    # append validated value to the record (colon-separated)
-                    record+=":$value"
-                    break
-                done
-            done
-
-            # append the new record to the data file
-            echo "$record" >> "$DATA_FILE"
-
-            echo "Data inserted successfully into $table_name."
-
-            # ask the user if they want to insert another row
-            read -p "Do you want to insert another row? (yes/no): " another
-            if [[ "$another" != "yes" && "$another" != "y" ]]; then
-                break
             fi
-            new_pk=$((new_pk + 1))
-        done
+
+            # find primary key column index (0-based)
+            PK_index=$(awk -F: '{if($3=="PK"){print NR-1; exit}}' "$META_FILE")
+
+            # ensure PK type is int or string
+            pk_type=${types[$PK_index]}
+
+            # main insert loop: allow multiple inserts
+            while true; do
+                # collect values into an array
+                row_vals=()
+
+                for ((i=0; i<columns_num; i++)); do
+                while true; do
+                        echo "Enter value for ${columns[i]} (${types[i]}): "
+                        read value
+
+                        case "${types[i]}" in
+                            int)
+                                if [[ -z "$value" ]]; then
+                                    echo "Integer value cannot be empty."
+                                    continue
+                                fi
+                                if ! [[ "$value" =~ ^-?[0-9]+$ ]]; then
+                                    echo "Invalid input. Please enter an integer."
+                                    continue
+                                fi
+                                ;;
+                            string)
+                                if [[ -z "$value" ]]; then
+                                    echo "Invalid input. Please enter a non-empty string."
+                                    continue
+                                fi
+                                # reject values that are purely numeric
+                                if [[ "$value" =~ ^-?[0-9]+$ ]]; then
+                                    echo "Invalid input. String cannot be only digits."
+                                    continue
+                                fi
+                                if [[ "$value" == *:* ]]; then
+                                    echo "Invalid input. ':' is not allowed in string values."
+                                    continue
+                                fi
+                                ;;
+                            bool)
+                                if [[ -z "$value" ]]; then
+                                    echo "Boolean value cannot be empty."
+                                    continue
+                                fi
+                                if ! [[ "$value" =~ ^(true|false)$ ]]; then
+                                    echo "Invalid input. Please enter 'true' or 'false'."
+                                    continue
+                                fi
+                                ;;
+                            *)
+                                echo "Unknown data type for column ${columns[i]}."
+                                continue 2
+                                ;;
+                        esac
+
+                        # if this is the primary key column, check uniqueness
+                        if [[ $i -eq $PK_index ]]; then
+                            # check for duplicate PK in existing data rows (data starts at NR>2)
+                            exists=$(awk -F: -v col=$((PK_index+1)) -v val="$value" 'NR>2 && $col==val{print 1; exit}' "$DATA_FILE")
+                            if [[ "$exists" == "1" ]]; then
+                                echo "Primary key value '$value' already exists. Please enter a unique value."
+                                continue
+                            fi
+                        fi
+
+                        row_vals+=("$value")
+                        break
+                    done
+                done
+
+                # join row_vals with ':' and append to data file
+                IFS=":"; record="${row_vals[*]}"; unset IFS
+                echo "$record" >> "$DATA_FILE"
+
+                echo "Data inserted successfully into $table_name."
+
+                read -p "Do you want to insert another row? (yes/no): " another
+                if [[ "$another" != "yes" && "$another" != "y" ]]; then
+                    break
+                fi
+            done
     else
         # data file does not exist for this table
         echo "Table $table_name does not exist in database $DB_NAME."
