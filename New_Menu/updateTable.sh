@@ -156,8 +156,36 @@ updateTable() {
                 done
                 echo ""
                 # prompt user to select which columns to update
-                echo "Enter the column numbers you want to update (space-separated, e.g., '1 3'): "
-                read -a columns_to_update
+                while true; do
+                    echo "Enter the column numbers you want to update (space-separated, e.g., '1 3'): "
+                    read columns_input
+
+                    # validate that input contains only space-separated numbers
+                    if [[ -z "$columns_input" ]]; then
+                        echo "Error: You must enter at least one column number."
+                        continue
+                    fi
+
+                    if ! [[ "$columns_input" =~ ^[0-9]+( [0-9]+)*$ ]]; then
+                        echo "Error: Please enter only numbers separated by spaces."
+                        continue
+                    fi
+
+                    # check that all numbers are valid column indices
+                    valid=1
+                    for col_choice in $columns_input; do
+                        if [[ $col_choice -lt 1 ]] || [[ $col_choice -gt $((columns_num-1)) ]]; then
+                            echo "Error: Column number must be between 1 and $((columns_num-1))."
+                            valid=0
+                            break
+                        fi
+                    done
+
+                    if [[ $valid -eq 1 ]]; then
+                        columns_to_update=($columns_input)
+                        break
+                    fi
+                done
 
                 # process each column, updating only selected ones
                 for ((i=1; i<columns_num; i++)); do
