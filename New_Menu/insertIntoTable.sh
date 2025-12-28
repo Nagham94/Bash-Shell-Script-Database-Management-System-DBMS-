@@ -53,16 +53,19 @@ insertIntoTable() {
 
                         case "${types[i]}" in
                             int)
+                                # reject empty values
                                 if [[ -z "$value" ]]; then
                                     echo "Integer value cannot be empty."
                                     continue
                                 fi
+                                # accept only integer values
                                 if ! [[ "$value" =~ ^-?[0-9]+$ ]]; then
                                     echo "Invalid input. Please enter an integer."
                                     continue
                                 fi
                                 ;;
                             string)
+                                # reject empty values
                                 if [[ -z "$value" ]]; then
                                     echo "Invalid input. Please enter a non-empty string."
                                     continue
@@ -72,16 +75,19 @@ insertIntoTable() {
                                     echo "Invalid input. String cannot be only digits."
                                     continue
                                 fi
+                                # separator check
                                 if [[ "$value" == *:* ]]; then
                                     echo "Invalid input. ':' is not allowed in string values."
                                     continue
                                 fi
                                 ;;
                             bool)
+                                # reject empty values
                                 if [[ -z "$value" ]]; then
                                     echo "Boolean value cannot be empty."
                                     continue
                                 fi
+                                # accept only 'true' or 'false'
                                 if ! [[ "$value" =~ ^(true|false)$ ]]; then
                                     echo "Invalid input. Please enter 'true' or 'false'."
                                     continue
