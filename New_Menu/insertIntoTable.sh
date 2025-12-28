@@ -19,22 +19,6 @@ insertIntoTable() {
         PK_index=$(awk -F: '{if($3=="PK") print NR-1}' "$META_FILE")
         columns_num=${#columns[@]}
 
-        # if file is empty or contains only whitespace, initialize headers and primary key
-        #if [ ! -s "$DATA_FILE" ] || [ -z "$(grep -v '^[[:space:]]*$' "$DATA_FILE")" ]; then
-        #    # remove any whitespace-only content
-        #    > "$DATA_FILE"
-        #    # write header line with column names (colon separated)
-        #    echo "${columns[*]}" | sed 's/ /:/g' >> "$DATA_FILE"
-	#
-        #    # write a simple separator line for readability
-        #    sep_line=""
-        #    for ((j=0; j<columns_num; j++)); do
-        #        sep_line+="---"
-        #    done
-        #    echo "$sep_line" >> "$DATA_FILE"
-	#
-        #   fi
-
             # main insert loop: allow multiple inserts
             while true; do
                 # collect values into an array
