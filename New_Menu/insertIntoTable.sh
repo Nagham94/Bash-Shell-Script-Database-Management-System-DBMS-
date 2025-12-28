@@ -35,12 +35,6 @@ insertIntoTable() {
 
             fi
 
-            # find primary key column index (0-based)
-            PK_index=$(awk -F: '{if($3=="PK"){print NR-1; exit}}' "$META_FILE")
-
-            # ensure PK type is int or string
-            pk_type=${types[$PK_index]}
-
             # main insert loop: allow multiple inserts
             while true; do
                 # collect values into an array

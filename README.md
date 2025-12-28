@@ -32,8 +32,10 @@ The Main Menu is the entry point for the DBMS. It provides the following options
 
 3. **Connect to Database**
    - Prompts the user to select an existing database
+   - Allows retry if database name doesn't exist (loop-based selection)
    - Establishes a connection to the database and loads the Table Menu
    - Sets the current database context for subsequent table operations
+   - Returns to Main Menu when done with table operations
 
 4. **Drop Database**
    - Prompts the user to select a database to delete
@@ -62,10 +64,13 @@ Once connected to a database, users access the Table Menu which provides the fol
    - Requires confirmation to prevent accidental deletion
 
 4. **Insert Into Table**
-   - Prompts user to enter values for each column in a new row
+   - Prompts user to enter a Primary Key value (int or string type)
+   - User must provide the PK explicitly (no auto-increment)
    - Validates input based on the defined data type
-   - Automatically generates and increments Primary Keys
-   - Prevents insertion of invalid data (empty strings, non-integer values for `int` type, etc.)
+   - For `int` Primary Keys: only positive integers are allowed (> 0)
+   - For `string` Primary Keys: must not be purely numeric
+   - Enforces Primary Key uniqueness (rejects duplicate PKs)
+   - Prompts for remaining column values with type validation
    - Supports multiple inserts in a single session
 
 5. **Select From Table**
@@ -81,11 +86,14 @@ Once connected to a database, users access the Table Menu which provides the fol
 
 7. **Update Table**
    - Offers two update modes:
-     - **Option 1:** Update all columns in a record at once
+     - **Option 1:** Update all columns (including Primary Key) in a record at once
      - **Option 2:** Update only selected columns while preserving others
    - Prompts user to search for a record by Primary Key
+   - Allows updating the Primary Key to a new value (with validation and uniqueness checks)
    - Validates all input according to data type rules
-   - Prevents updating with invalid data
+   - For `int` Primary Keys: only positive integers are allowed
+   - For `string` Primary Keys: must not be purely numeric
+   - Prevents duplicate Primary Keys
    - Supports multiple updates in a single session
 
 8. **Back to Main Menu**
@@ -112,11 +120,13 @@ Once connected to a database, users access the Table Menu which provides the fol
 ### Integer (`int`)
 - Must not be empty
 - Must be numeric (positive or negative)
-- Regex: `^-?[0-9]+$`
+- For Primary Key columns: must be positive (> 0), no zero or negative values
+- Regex (non-PK): `^-?[0-9]+$` | Regex (PK): `^[1-9][0-9]*$`
 
 ### String (`string`)
 - Must not be empty
 - Cannot contain colon (`:`) characters (reserved as delimiter)
+- Cannot be purely numeric (e.g., "123" is rejected, but "abc123" is allowed)
 - Any alphanumeric or special characters (except `:`) are allowed
 
 ### Boolean (`bool`)
@@ -125,7 +135,29 @@ Once connected to a database, users access the Table Menu which provides the fol
 
 ---
 
-## Usage Example
+## Recent Changes
+
+### Version Updates
+
+- **Primary Key Management:** Removed auto-increment; users now explicitly enter PK values
+  - PK values must match the defined type (int or string)
+  - Integer PKs must be positive (> 0)
+  - String PKs must not be purely numeric
+  - Uniqueness is enforced across all records
+
+- **Update Operations:** Users can now update Primary Key values
+  - Same validation and uniqueness rules apply as for Insert operations
+  - Prevents duplicate PKs while allowing existing value to remain unchanged
+
+- **Input Validation:** Enhanced with detailed comments
+  - All validation blocks now include inline comments explaining each check
+  - Consistent validation across Insert and Update operations
+
+- **Database Connection:** Improved retry mechanism
+  - Users can retry entering database name if it doesn't exist
+  - Table Menu loops to allow multiple operations without returning to Main Menu
+
+---
 
 ```bash
 # Run the main DBMS script
