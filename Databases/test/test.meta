@@ -1,0 +1,4 @@
+name:string
+phone:int
+id:int
+bool:bool
