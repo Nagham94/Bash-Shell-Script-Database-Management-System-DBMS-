@@ -27,6 +27,11 @@ validate_input() {
                 echo "Invalid input. Please enter a non-empty string."
                 return 1
             fi
+            # reject values that are purely numeric
+            if [[ "$value" =~ ^-?[0-9]+$ ]]; then
+                echo "Invalid input. String cannot be only digits."
+                return 1
+            fi
             # separator check
             if [[ "$value" == *:* ]]; then
                 echo "Invalid input. ':' is not allowed in string values."
