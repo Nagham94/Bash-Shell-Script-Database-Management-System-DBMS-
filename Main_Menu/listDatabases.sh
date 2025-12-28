@@ -8,5 +8,6 @@ listDatabases(){
         else
                 echo "No databases are found"
         fi
+        cd ..
 }
 
