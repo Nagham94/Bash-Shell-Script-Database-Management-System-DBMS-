@@ -79,8 +79,8 @@ insertIntoTable() {
 
                         # if this is the primary key column, check uniqueness
                         if [[ $i -eq $PK_index ]]; then
-                            # check for duplicate PK in existing data rows (data starts at NR>2)
-                            exists=$(awk -F: -v col=$((PK_index+1)) -v val="$value" 'NR>2 && $col==val{print 1; exit}' "$DATA_FILE")
+                            # check for duplicate PK in existing data rows
+                            exists=$(awk -F: -v col=$((PK_index+1)) -v val="$value" '$col==val{print 1; exit}' "$DATA_FILE")
                             if [[ "$exists" == "1" ]]; then
                                 echo "Primary key value '$value' already exists. Please enter a unique value."
                                 continue
