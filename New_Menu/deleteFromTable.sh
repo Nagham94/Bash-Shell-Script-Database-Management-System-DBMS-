@@ -23,23 +23,40 @@ deleteFromTable() {
         return
     fi
 
-    read -p "Enter Primary Key value to delete: " pk
+    echo "Delete options:"
+    echo "1) Delete row by PK"
+    echo "2) Delete all rows"
+    read -p "Choose an option: " del_choice
 
-    # Check if record exists
-    if ! awk -F':' -v key="$pk" '$1 == key {found=1} END{exit !found}' "$DATA_FILE"
-    then
-        echo "Record not found"
-        return
-    fi
+    case $del_choice in
+        1)
+            # Delete by PK
+            read -p "Enter Primary Key value to delete: " pk
 
-    echo "Are you sure you want to delete this record? (y/n)"
-    read confirm
-    [[ "$confirm" != "y" ]] && echo "Deletion cancelled" && return
+            # Check if record exists
+            if ! awk -F':' -v key="$pk" '$1 == key {found=1} END{exit !found}' "$DATA_FILE"; then
+                echo "Record not found"
+                return
+            fi
 
-    # Delete record safely
-    awk -F':' -v key="$pk" '$1 != key' "$DATA_FILE" > "$DATA_FILE.tmp"
-    mv "$DATA_FILE.tmp" "$DATA_FILE"
+            echo "Are you sure you want to delete this record? (y/n)"
+            read confirm
+            [[ "$confirm" != "y" ]] && echo "Deletion cancelled" && return
 
-    echo "Record deleted successfully"
+            # Delete record safely
+            awk -F':' -v key="$pk" '$1 != key' "$DATA_FILE" > "$DATA_FILE.tmp"
+            mv "$DATA_FILE.tmp" "$DATA_FILE"
+
+            echo "Record deleted successfully"
+            ;;
+        2)
+            # Delete all rows
+            > "$DATA_FILE"
+            echo "All rows deleted successfully from table '$table'."
+            ;;
+        *)
+            echo "Invalid choice. Please enter 1 or 2."
+            ;;
+    esac
 }
 
