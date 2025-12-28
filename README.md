@@ -10,7 +10,7 @@ This is a file-based Database Management System (DBMS) implemented entirely in B
 - **Table Operations:** Create, list, and drop tables with metadata support
 - **Data Manipulation:** Insert, select, update, and delete records with type validation
 - **Type Safety:** Built-in validation for `int`, `string`, and `bool` data types
-- **Primary Key Support:** Automatic PK generation and uniqueness enforcement
+- **Primary Key Support:** uniqueness enforcement
 - **Data Integrity:** Protection against invalid input and separator characters
 
 ---
@@ -67,7 +67,6 @@ Once connected to a database, users access the Table Menu which provides the fol
    - Prompts user to enter a Primary Key value (int or string type)
    - User must provide the PK explicitly (no auto-increment)
    - Validates input based on the defined data type
-   - For `int` Primary Keys: only positive integers are allowed (> 0)
    - For `string` Primary Keys: must not be purely numeric
    - Enforces Primary Key uniqueness (rejects duplicate PKs)
    - Prompts for remaining column values with type validation
@@ -91,7 +90,6 @@ Once connected to a database, users access the Table Menu which provides the fol
    - Prompts user to search for a record by Primary Key
    - Allows updating the Primary Key to a new value (with validation and uniqueness checks)
    - Validates all input according to data type rules
-   - For `int` Primary Keys: only positive integers are allowed
    - For `string` Primary Keys: must not be purely numeric
    - Prevents duplicate Primary Keys
    - Supports multiple updates in a single session
@@ -120,7 +118,6 @@ Once connected to a database, users access the Table Menu which provides the fol
 ### Integer (`int`)
 - Must not be empty
 - Must be numeric (positive or negative)
-- For Primary Key columns: must be positive (> 0), no zero or negative values
 - Regex (non-PK): `^-?[0-9]+$` | Regex (PK): `^[1-9][0-9]*$`
 
 ### String (`string`)
@@ -141,11 +138,10 @@ Once connected to a database, users access the Table Menu which provides the fol
 
 - **Primary Key Management:** Removed auto-increment; users now explicitly enter PK values
   - PK values must match the defined type (int or string)
-  - Integer PKs must be positive (> 0)
   - String PKs must not be purely numeric
   - Uniqueness is enforced across all records
 
-- **Update Operations:** Users can now update Primary Key values
+- **Update Operations:** 
   - Same validation and uniqueness rules apply as for Insert operations
   - Prevents duplicate PKs while allowing existing value to remain unchanged
 
