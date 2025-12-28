@@ -9,32 +9,55 @@ createTable() {
     fi
 
     read -p "Enter table name: " TABLE_NAME
-    [[ -z "$TABLE_NAME" ]] && { echo "Table name cannot be empty"; return; }
+    if [[ -z "$TABLE_NAME" ]]; then
+	    echo "Table name cannot be empty";
+	    return; 
+    fi
 
     meta_file="$CURRENT_DB/$TABLE_NAME.meta"
     data_file="$CURRENT_DB/$TABLE_NAME.data"
 
-    [[ -f "$meta_file" ]] && { echo "Table already exists"; return; }
+    if [[ -f "$meta_file" ]]; then
+	     echo "Table already exists"
+	     return
+    fi
 
     read -p "Enter number of columns: " col_count
-    [[ ! "$col_count" =~ ^[0-9]+$ || "$col_count" -le 0 ]] && {
+    if [[ ! "$col_count" =~ ^[0-9]+$ || "$col_count" -le 0 ]]; then
         echo "Invalid number of columns"
         return
-    }
+    fi
 
     > "$meta_file"
 
     # Ask for PK name
     while true; do
         read -p "Enter primary key column name: " pk_name
-        [[ -z "$pk_name" ]] && { echo "PK name cannot be empty"; continue; }
-        break
+        if [[ -z "$pk_name" ]]; then
+	       	echo "PK name cannot be empty";
+	       	continue;
+	else
+        	break
+	fi
     done
 
-    echo "Note: Primary key '$pk_name' is INT by default"
+    while true; do
+    	read -p "Enter primary key type (int/string): " pk_type
+    	valid_types_pk=("int" "string")
 
-    # Store PK
-    echo "$pk_name:int:PK" >> "$meta_file"
+    	if [[ -z "$pk_type" ]]; then
+		echo "Data type cannot be empty"; 
+		continue;
+	fi
+
+        if [[ " ${valid_types_pk[*]} " =~ " $pk_type " ]]; then # check for a matched regex pattern.
+    		break
+	else
+		echo "Invalid data type. Allowed: int, string"
+    	fi
+	done
+
+   echo "$pk_name:$pk_type" >> "$meta_file"
 
     valid_types=("int" "string" "bool")
 
@@ -50,7 +73,7 @@ createTable() {
             fi
 
             # Check duplicate column names
-            if cut -d: -f1 "$meta_file" | grep -qx "$col_name"; then
+            if cut -d: -f1 "$meta_file" | grep -qx "$col_name"; then # q to quite without printing, x for exact match
                 echo "Column name '$col_name' already exists"
                 continue
             fi
@@ -62,7 +85,10 @@ createTable() {
         while true; do
             read -p "Column $i type (int/string/bool): " col_type
 
-            [[ -z "$col_type" ]] && { echo "Data type cannot be empty"; continue; }
+            if [[ -z "$col_type" ]]; then
+		    echo "Data type cannot be empty";
+		    continue; 
+	    fi
 
             if [[ " ${valid_types[*]} " =~ " $col_type " ]]; then
                 break
@@ -76,7 +102,5 @@ createTable() {
 
     touch "$data_file"
     echo "Table '$TABLE_NAME' created successfully"
-    
-    export TABLE_NAME
 }
 
