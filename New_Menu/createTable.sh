@@ -57,7 +57,7 @@ createTable() {
     	fi
 	done
 
-   echo "$pk_name:$pk_type;PK" >> "$meta_file"
+   echo "$pk_name:$pk_type:PK" >> "$meta_file"
 
     valid_types=("int" "string" "bool")
 
